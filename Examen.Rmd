@@ -1,0 +1,122 @@
+---
+title: "Examen"
+output: word_document
+date: "2023-03-16"
+---
+Alejandra Coeto
+A01285221
+MA1031
+
+# Pregunta 1
+Suponga que la fuerza que actúa sobre una columna que ayuda a sostener un edificio es una variable aleatoria distribuida normalmente con un valor medio de 19.0 kips y una desviación estándar de 1.5 kips. Calcule las siguientes probabilidades:
+
+## a. P(x<=19)
+```{r}
+r1a = pnorm(19,19,1.5)
+cat(r1a)
+```
+
+
+## b. P(17<=x<=22)
+```{r}
+r1b = pnorm(22,19,1.5) - pnorm(17,19,1.5)
+cat(r1b)
+```
+
+## c. P(x > 15)
+```{r}
+r1c = 1-pnorm(15,19,1.5)
+cat(r1c)
+```
+
+# Pregunta 2
+Para poder usar cierto polímero su firmeza debe ser mayor a 48 MPa. Se realizó un muestreo de 12 especímenes de un paquete de polímeros y se obtuvo una media de 50.7 y una desviación estándar de 1.7. Se quiere hacer una prueba de hipótesis para saber si se puede usar ese paquete de polímeros. Obtén el valor del estadístico t que se necesita para realizar la prueba y en tu hoja de procedimientos explica si se rechaza o no la hipótesis nula
+```{r}
+xbarra <- 50.7  # Datos del problema
+desvia <- 1.7   # Datos del problema
+n <- 12         # Datos del problema
+mu <- 48      # Media de referencia
+gl=n-1        # Grados de libertad
+alfa <- 0.05    #Valor de alfa
+
+est <- (xbarra - mu) / (desvia / sqrt(n))
+cat("el estadístico de prueba es",est,"\n")  
+
+cat("el valor crítico es",qt(1-alfa,gl),"\n")
+cat("el p-value es",pt(est,gl,lower.tail = FALSE))
+
+# Se rechaza Ho si p-value es menor a alfa
+# Se rechaza Ho si el estadístico de prueba es mayor al valor crítico
+```
+
+Usando la regla del p-value, se rechaza la hipótesis nula ya que el p-value (9.29e-05) es menor que alfa (0.05). Además el estadístico de prueba (5.50) es mayor al valor crítico (1.8).
+
+# Pregunta 6
+```{r}
+r6 = 1780+1.4*2540
+cat(r6)
+```
+
+# Pregunta 7
+```{r}
+edad = c(17.2,43.5,30.7,53.1,37.2,21,27.6,46.3)
+cas = c(0.19,0.2,0.26,0.16,0.24,0.2,0.18,0.23)
+cor.test(edad,cas)
+```
+
+# Pregunta 8
+## 1)
+```{r}
+data = read.csv("datos sistolica diatolica estatura.csv")
+cor(data)
+cor.test(data$sistolica,data$diastolica)
+cor.test(data$sistolica,data$estatura)
+cor.test(data$diastolica,data$estatura)
+```
+Como se puede ver en la matriz de correlaciones, solo existe una relación entre las variables sistolica y diastolica con coeficiente de correlación de 0.65, lo cual es significativo, ya que el p-value es de 0.0116, siendo menor que alfa (0.05). Por otro lado, el resto de las variables no tienen una correlación ya que sus p-values son mayores a 0.05, por lo que no se rechazaría la hipótesis nula y se aceptaría que no existe una correlación.
+
+## 2) 
+```{r}
+sistolica = data$sistolica
+diastolica = data$diastolica
+estatura = data$estatura
+
+A = lm(sistolica~diastolica)
+
+summary(A)
+```
+$y = 0.5542diastolica + 87.35$
+
+```{r}
+B = lm(sistolica~estatura)
+summary(B)
+```
+$y = 18.09estatura  + 106.16$
+
+Analizando los modelos, se puede concluir que el mejor modelo es el primero debido a que tiene tiene un coeficiente de determinación de 0.377, lo cual es mejor que el del segundo modelo (-0.0186). Además, el primer modelo tiene un p-value de 0.01158, por lo que se rechaza la hipótesis nula y se acepta que el modelo es adecuado para representar la relación lineal, mientras que en el segundo modelo el p-value es mayor a alfa (0.05), lo que indica que el modelo no es significativo.
+
+## 3)
+```{r}
+z1 = diastolica
+z2 = estatura
+
+C = lm(sistolica~z1+z2)
+summary(C)
+```
+Tomando en consideración la variabilidad de los datos, el primer modelo tuvo un valor $r^2 = 3766$, el segundo modelo $r^2 = -0.0186$ y el tercero un valor de variabilidad múltiple de $r^2 =0.48$ y un valor ajustado de $r^2 = 0.39$. Por lo tanto, se puede concluir que el tercer modelo tiene un mejor valor de variación, por lo que es un mejor modelo. Además, su p-value (0.02) es menor a alfa(0.05), por lo que sí existe una relación múltiple entre las variables. No obstante, el p-value del primer modelo es menor, aunque para esta conclusión se tomó en cuenta la variabilidad de datos como punto de comparación.
+
+## 4)
+```{r}
+shapiro.test(C$residuals)
+t.test(C$residuals)
+qqnorm(C$residuals)
+qqline(C$residuals)
+
+plot(C$fitted.values,C$residuals)
+abline(h=0,col="red")
+
+```
+
+A pesar de que el tercer y primer modelo son significativos, esto no necesariamente significa que son buenos modelos. Además, sus coeficientes de determinación tienen valores menores a 5, lo cual es considerablemente bajo. Además, después de realizar un análisis de residuos del tercer modelo, se descubrió que el modelo no pasa todos los supuestos, pues la media no es 0, sino un valor mucho menor (-5.1e-16), mientras que sí pasó el resto de los supuestos ya que parece haber homocedasticidad, aunque con muchos outliers según la gráfica de residuos y viendo la gráfica de probabilidad de  distribución normal, se puede ver que sí está distribuído normalmente. Por lo tanto, se recomendaría que los modelos no se utilizaran para realizar predicciones al no haber pasado los supuestos. Sin embargo, pueden ser útiles para comprender las relaciones entre las variables.
+
+

@@ -1,0 +1,22 @@
+---
+title: "Formulas"
+output: html_document
+date: "2023-03-16"
+---
+
+Catálogo de funciones de R
+Para redondear: round(valor a redondear,3)
+pnorm()
+qnorm()
+read.csv()
+cor()
+cor.test(x,y,alternative="two.sided", method = "pearson",conf.level=0.95)
+plot()
+abline()
+text()
+lm()
+shapiro.test()
+t.test()
+qqnorm()
+qqline()
+hist()

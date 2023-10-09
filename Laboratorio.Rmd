@@ -1,0 +1,192 @@
+---
+title: "Laboratorio"
+output: word_document
+date: "2023-03-15"
+---
+# 1. Suponga que la concentración de una sustancia es una variable aleatoria X distribuida normalmente con un valor medio de 11.0 y una desviación estándar de 1.5. Calcule las siguientes probabilidades
+
+## a. P(x<=11)
+```{r}
+pnorm(11,11,1.5)
+```
+
+## b. P(x<=12.5)
+```{r}
+pnorm(12.5,11,1.5)
+```
+
+## c. P(x>=3.5)
+```{r}
+1 - pnorm(3.5,11,1.5)
+```
+
+## d. P(9<=x<=14)
+```{r}
+pnorm(14,11,1.5) - pnorm(9,11,1.5)
+```
+
+# 2. Se obtuvo una muestra de 9 especímenes de lodo y se midió el pH de cada uno. Se quiere comprobar si es verdadero que la media poblacional del pH es menos de 7. La media de la muestra fue de 6.78 y su desviación estándar de 0.246. Obtener
+
+## a. Estadístico t
+```{r}
+t = (6.78-7)/(0.246/sqrt(9))
+cat(t)
+```
+
+## b. Valor p
+```{r}
+pt(t,9-1)
+```
+
+## c. Alfa de 0.03, indique la zona de rechazo y conclusión
+```{r}
+qt(0.03,9-1)
+```
+Regla clásica: se rechaza la hipótesis nula si el estadístico de prueba es menor al valor crítico. En este caso, el estadístico tiene un valor de -2.829 y el valor crítico tiene un valor de -2.189. Por lo tanto, sí se rechaza la hipótesis nula. Además, se puede tomar el p-value (0.013) y al compararlo con el valor de alfa (0.03), el p-value es menor, por ende se puede concluir nuevamente que se debe rechazar la hipótesis nula. Esto quiere decir que la media no es menos de 7.
+
+# 3. El coeficiente de correlación entre dos variables “x” y “y” es de 0.9231 ¿Qué interpretación se puede dar a este valor?
+Este coeficiente es bastante cercano a 1. Por lo tanto, se puede inferir que existe una buena relación lineal entre ambas variables y que estas tienen una relación lineal positiva, es decir que cuando la x aumente, la y también incrementará.
+
+# 4. El autor de un artículo de investigación presenta un análisis de correlación para investigar la relación entre el máximo nivel de lactato “x” y el endurecimiento muscular “y” se obtuvo un valor de correlación de r=0.7491, un valor de estadístico t de 3.9 y u p-value de 0.001 ¿Qué conclusión se puede dar en el contexto del problema?
+Primeramente, se puede concluir que con base en el coeficiente de correlación, existe una buena relación lineal positiva entre las variables x e y. Adicionalmente, dado el p-value, asumiendo que el valor de alfa es 0.05, se puede ver que la hipótesis nula (no existe una correlación) es rechazada, lo cual confirma la realación entre las variables. 
+
+# 5. En un artículo se investigan las propiedades físicas de seis telas ignífugas. Realiza un
+análisis de correlación con un nivel de significancia de 0.05 para determinar si existe
+relación lineal entre rigidez “x” y espesor “y”
+```{r}
+x = c(7.85,24.6,12.32,7.04,24.13,35.81)
+y = c(0.28,0.65,0.34,0.28,0.8,0.56)
+cor.test(x,y,alternative="two.sided", method = "pearson",conf.level=0.95)
+```
+Como se puede ver, aparentemente existe una buena relación lineal entre las variables al tener un coeficiente de correlación de 0.76. Sin embargo,al realizar la prueba de hipótesis donde $H_0: p = 0$ y $H_1: p != 0$, se puede ver que el p-value de 0.076 es mayor que alfa (0.05). Por lo tanto, se acepta la hipótesis nula: no existe evidencia suficiente para indicar que hay una relación lineal.
+
+# 6. Se calculó el coeficiente de determinación de un conjunto de datos y se obtuvo r2=0.34. De
+acuerdo con este valor se puede concluir que..
+El modelo de regresión no sería adecuado para este conjunto de datos, pues tiene un 34% de variación.
+
+# 7. Se calculó el coeficiente de determinación de un conjunto de datos y se obtuvo r2=0.867.
+De acuerdo con este valor se puede concluir que
+El modelo propuesto es adecuado para representar la relación entre los datos, pues tiene un 87% de variación en la variable y.
+
+# 8.La velocidad del flujo (m3/min) en un aparato usado para medir la calidad de aire depende
+de la caída de presión (pulgadas de agua) a través del filtro del aparato. Se hizo un análisis
+de regresión y el modelo fue de: y=-0.14+0.095x 
+
+## a. ¿Cuál es el cambio esperado de la velocidad de flujo asociada con un aumento de
+1 pulgada de la caída de presión?
+Cambia en un factor 0.095
+
+## b. ¿Cuál es la velocidad de flujo que se espera para una caída de presión de 10
+pulgadas?
+```{r}
+-0.14+0.095*10
+```
+
+## c. ¿Cuál es la velocidad de flujo que se espera para una caída de presión de 17
+pulgadas?
+```{r}
+-0.14+0.095*17
+```
+
+# 9. En una investigación se quiere predecir la cantidad de Betacaroteno utilizando como
+posibles predictores el ácido linoleico y la cantidad de keroseno, se hizo un experimento
+con 10 observaciones que se presentan en la siguiente tabla
+
+## a. Identifique si las variables tienen relación lineal
+```{r}
+linoleic = c(30,47,25,51,40,51,74,36,59,76)
+kerosene = c(12,10,17,16,5,19,7,12,13,16)
+betacaro = c(94,108,112,178,94,175,170,117,142,211)
+cor.test(linoleic,betacaro)
+cor.test(kerosene,betacaro)
+```
+Si, existe una relación lineal entre el ácido linoleico y el betacaroteno al tener un p-value de 0.004 (menor a alfa). Sin embargo, no existe una relación lineal entre el keroseno y betacaroteno al haber un p-value de 0.169.
+
+## b. Proponga un modelo de Betacaroteno como variable dependiente y Ácido
+linoleico como variable independiente
+```{r}
+A = lm(betacaro~linoleic)
+summary(A)
+```
+$y = 1.9436x + 45.0594$
+
+## c. Proponga un modelo de Betacaroteno como variable dependiente y keroseno
+como variable independiente
+```{r}
+B = lm(betacaro~kerosene)
+summary(B)
+```
+$y = 4.321x + 85.217$
+
+## d. Cuál de los dos modelos lineales simples propuestos en a y b es mejor?
+El primer modelo es mejor al tener un p-value (0.004) menor a alfa, por lo que sí es un modelo significativo y el segundo modelo no.
+
+## e. Proponga un modelo de regresión multiple usando Betacaroteno como variable
+dependiente y Ácido linoleico y keroseno como variables independientes. ¿Este
+modelo es mejor que los simples? Explique
+```{r}
+C = lm(betacaro~linoleic+kerosene)
+summary(C)
+```
+Este modelo es mejor que los demás al tener un r^2 de 0.9255 y un alfa mucho menor (0.00011)
+$y = 4.7378kerosene + 2.0102linoleic - 18.3683$
+
+# 10. La composición de paneles tipo sándwich de nidode abeja se utilizan ampliamente en
+diversas aplicaciones estructurales aeroespaciales. Se tienen los siguientes datos sobre x =
+espesor del preimpregnado (mm) y y = aplastamiento del núcleo (%)
+
+```{r}
+x1 = c(0.246,0.25,0.251,0.251,0.254,0.262,0.264,0.27,0.272,0.277,0.281,0.289,0.29,0.292,0.293)
+y1 = c(15.9,11.1,14.9,10.6,13.6,7.6,6.2,1.6,3.7,0.8,0.8,0.9,0.8,2.9,3)
+```
+
+## a. Realiza un diagrama de dispersión con los datos
+```{r}
+plot(x1,y1,col="blue")
+```
+## b. Identifica si la relación entre las variables es lineal y propón un modelo lineal
+```{r}
+D = lm(y1~x1)
+summary(D)
+```
+
+$y = -291.58x + 84.86$
+
+## c. ¿crees que podríamos plantear algún otro modelo no lineal que nos ayude a tener
+un mejor modelo?
+Sí, este modelo en realidad tiene una patrón cuadrático o incluso polinómico de grado 3.
+
+## d. 
+
+```{r}
+z1 = x1
+z2 = x1^2
+z3 = x1^3
+
+E = lm(y1~z1+z2+z3)
+summary(E)
+plot(x1,y1)
+x = seq(min(x1), max(x1), 0.001)
+y =  345335*x^3 - 269480*x^2 + 69558*x- 5929
+lines(x,y)
+```
+$y =  345335*x^3 - 269480*x^2 + 69558*x- 5929$
+
+
+```{r}
+z1 = x1
+z2 = x1^2
+
+
+E = lm(y1~z1+z2)
+summary(E)
+plot(x1,y1)
+x2 = seq(min(x1), max(x1), 0.001)
+y2 = 10269.8*x2^2 - 5840.2*x2 + 831.6
+lines(x2,y2)
+```
+$ y = 10269.8*x2^2 - 5840.2*x2 + 831.6$
+
+## e. 
+Con base en los resultados de los modelos, se puede ver que el segundo y tercer modelo tienen coeficientes de determinación con valores arriba de 0.9, lo cual indica un buen modelo. Además, los p-values son menores a alfa, por lo que los modelos son significativos. El único motivo por el cual el último modelo podría ser mejor que el segundo es debido a la significancia de cada una de las betas, ya que en el segundo modelo, estas tienen valores mayores a alfa, por lo que no son significativas. Por este motivo, el tercer modelo puede considerarse como mejor.
+
